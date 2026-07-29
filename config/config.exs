@@ -7,6 +7,7 @@
 # General application configuration
 import Config
 
+config :cinder, default_theme: "daisy_ui"
 config :ash_oban, pro?: false
 
 config :pythonx, :uv_init,
