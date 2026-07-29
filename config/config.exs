@@ -70,7 +70,7 @@ config :spark,
 config :busca_livro,
   ecto_repos: [BuscaLivro.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [BuscaLivro.Accounts]
+  ash_domains: [BuscaLivro.Livros, BuscaLivro.Accounts]
 
 # Configure the endpoint
 config :busca_livro, BuscaLivroWeb.Endpoint,
