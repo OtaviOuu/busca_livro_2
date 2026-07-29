@@ -87,7 +87,8 @@ defmodule BuscaLivro.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
-      {:floki, "~> 0.38.1"}
+      {:floki, "~> 0.38.1"},
+      {:pythonx, "~> 0.4.0"}
     ]
   end
 

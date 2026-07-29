@@ -9,6 +9,17 @@ import Config
 
 config :ash_oban, pro?: false
 
+config :pythonx, :uv_init,
+  pyproject_toml: """
+  [project]
+  name = "scraper"
+  version = "0.0.0"
+  requires-python = "==3.13.*"
+  dependencies = [
+    "nodriver"
+  ]
+  """
+
 config :busca_livro, Oban,
   engine: Oban.Engines.Basic,
   notifier: Oban.Notifiers.Postgres,

@@ -18,6 +18,26 @@ defmodule BuscaLivro.Livros.Livro do
     defaults [:create, :read, :update, :destroy]
     default_accept [:titulo, :image_url, :loja_nome]
 
+    action :scrape_shopee, {:array, :map} do
+      run BuscaLivro.Livros.Actions.ScrapeShopee
+
+      prepare after_action(fn query, records, _context ->
+                dbg(records)
+
+                case Ash.bulk_create(records, BuscaLivro.Livros.Livro, :create,
+                       rollback_on_error?: false,
+                       stop_on_error?: false
+                     ) do
+                  %Ash.BulkResult{status: :success} ->
+                    {:ok, records}
+
+                  %Ash.BulkResult{status: :partial_success, errors: errors} = result ->
+                    dbg(errors)
+                    {:ok, records}
+                end
+              end)
+    end
+
     action :scrape_estante_virtual, {:array, :map} do
       run BuscaLivro.Livros.Actions.ScrapeEstanteVirtual
 
