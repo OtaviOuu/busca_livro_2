@@ -70,9 +70,10 @@ defmodule BuscaLivro.Livros.Actions.ScrapeEstanteVirtual do
   defp extract_book_info(%{
          "name" => name,
          "productCode" => product_code,
-         "image" => image_url
+         "image" => image_url,
+         "description" => descricao
        }) do
-    %{titulo: name, image_url: image_url, loja_nome: "Estante Virtual"}
+    %{titulo: name, image_url: image_url, descricao: descricao, loja_nome: "Estante Virtual"}
   end
 
   defp extract_book_info(_), do: nil

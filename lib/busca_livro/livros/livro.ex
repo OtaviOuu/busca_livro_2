@@ -28,7 +28,7 @@ defmodule BuscaLivro.Livros.Livro do
 
   actions do
     defaults [:create, :read, :update, :destroy]
-    default_accept [:titulo, :image_url, :loja_nome]
+    default_accept [:titulo, :image_url, :loja_nome, :descricao]
 
     action :scrape_shopee, {:array, :map} do
       run BuscaLivro.Livros.Actions.ScrapeShopee
@@ -55,8 +55,14 @@ defmodule BuscaLivro.Livros.Livro do
 
       prepare after_action(fn query, records, _context ->
                 case Ash.bulk_create(records, BuscaLivro.Livros.Livro, :create) do
-                  %Ash.BulkResult{status: :success} -> {:ok, records}
-                  _ -> {:error, "Erro ao criar livros"}
+                  %Ash.BulkResult{status: :success} ->
+                    {:ok, records}
+
+                  %Ash.BulkResult{status: :partial_success} ->
+                    {:ok, records}
+
+                  %Ash.BulkResult{status: :error, errors: errors} ->
+                    {:error, errors}
                 end
               end)
     end
@@ -70,6 +76,10 @@ defmodule BuscaLivro.Livros.Livro do
     end
 
     attribute :image_url, :string do
+      allow_nil? true
+    end
+
+    attribute :descricao, :string do
       allow_nil? true
     end
 

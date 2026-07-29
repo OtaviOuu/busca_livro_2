@@ -16,6 +16,8 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
         grid_columns={2}
       >
         <:col field="titulo" search />
+        <:col field="descricao" filter />
+
         <:filter field="loja.nome" />
 
         <:item :let={livro}>
