@@ -1,6 +1,9 @@
 defmodule BuscaLivroWeb.LivrosLive.Index do
   use BuscaLivroWeb, :live_view
 
+  on_mount {BuscaLivroWeb.LiveUserAuth, :current_user}
+  on_mount {BuscaLivroWeb.LiveUserAuth, :live_user_optional}
+
   def render(assigns) do
     ~H"""
     <Layouts.app {assigns}>

@@ -35,32 +35,49 @@ defmodule BuscaLivroWeb.Layouts do
 
   def app(assigns) do
     ~H"""
-    <header class="navbar px-4 sm:px-6 lg:px-8">
-      <div class="flex-1">
-        <a href="/" class="flex-1 flex w-fit items-center gap-2">
-          <img src={~p"/images/logo.svg"} width="36" />
-          <span class="text-sm font-semibold">v{Application.spec(:phoenix, :vsn)}</span>
-        </a>
+    <div class="navbar bg-base-100 shadow-sm">
+      <div class="navbar-start">
+        <div class="dropdown">
+          <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h7"
+            /></svg>
+          </div>
+          <ul
+            tabindex="-1"
+            class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+          >
+            <li :if={@current_user}>
+              <.link class="text-primary" navigate={~p"/sign-out"}>Sair</.link>
+            </li>
+          </ul>
+        </div>
+        <div :if={@current_user} class="ml-2 text-sm font-semibold">
+          {@current_user.email}
+        </div>
+
+        <div :if={!@current_user} class="ml-2 text-sm font-semibold">
+          <.link navigate={~p"/register"} class="btn btn-ghost btn-sm">
+            Registar
+          </.link>
+        </div>
       </div>
-      <div class="flex-none">
-        <ul class="flex flex-column px-1 space-x-4 items-center">
-          <li>
-            <a href="https://phoenixframework.org/" class="btn btn-ghost">Website</a>
-          </li>
-          <li>
-            <a href="https://github.com/phoenixframework/phoenix" class="btn btn-ghost">GitHub</a>
-          </li>
-          <li>
-            <.theme_toggle />
-          </li>
-          <li>
-            <a href="https://phoenix.hexdocs.pm/overview.html" class="btn btn-primary">
-              Get Started <span aria-hidden="true">&rarr;</span>
-            </a>
-          </li>
-        </ul>
+      <div class="navbar-center">
+        <a class="btn btn-ghost text-xl">BuscaLivros</a>
       </div>
-    </header>
+      <div class="navbar-end">
+        <.theme_toggle />
+      </div>
+    </div>
 
     <main class="px-4 py-20 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-4xl space-y-4">
