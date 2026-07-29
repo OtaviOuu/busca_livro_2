@@ -9,8 +9,7 @@ defmodule BuscaLivro.Repo.Migrations.MigrateResources1 do
 
   def up do
     create table(:lojas, primary_key: false) do
-      add :id, :uuid, null: false, default: fragment("uuid_generate_v7()"), primary_key: true
-      add :nome, :text, null: false
+      add :nome, :text, null: false, primary_key: true
       add :url, :text, null: false
 
       add :inserted_at, :utc_datetime_usec,
@@ -22,9 +21,12 @@ defmodule BuscaLivro.Repo.Migrations.MigrateResources1 do
         default: fragment("(now() AT TIME ZONE 'utc')")
     end
 
+    create unique_index(:lojas, [:nome], name: "lojas_unique_nome_index")
+
     create table(:livros, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("uuid_generate_v7()"), primary_key: true
       add :titulo, :text, null: false
+      add :image_url, :text
 
       add :inserted_at, :utc_datetime_usec,
         null: false,
@@ -34,20 +36,22 @@ defmodule BuscaLivro.Repo.Migrations.MigrateResources1 do
         null: false,
         default: fragment("(now() AT TIME ZONE 'utc')")
 
-      add :loja_id,
+      add :loja_nome,
           references(:lojas,
-            column: :id,
-            name: "livros_loja_id_fkey",
-            type: :uuid,
+            column: :nome,
+            name: "livros_loja_nome_fkey",
+            type: :text,
             prefix: "public"
           )
     end
   end
 
   def down do
-    drop constraint(:livros, "livros_loja_id_fkey")
+    drop constraint(:livros, "livros_loja_nome_fkey")
 
     drop table(:livros)
+
+    drop_if_exists unique_index(:lojas, [:nome], name: "lojas_unique_nome_index")
 
     drop table(:lojas)
   end

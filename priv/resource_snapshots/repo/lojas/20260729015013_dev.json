@@ -2,22 +2,10 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "fragment(\"uuid_generate_v7()\")",
-      "generated?": false,
-      "precision": null,
-      "primary_key?": true,
-      "references": null,
-      "scale": null,
-      "size": null,
-      "source": "id",
-      "type": "uuid"
-    },
-    {
-      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "precision": null,
-      "primary_key?": false,
+      "primary_key?": true,
       "references": null,
       "scale": null,
       "size": null,
@@ -66,9 +54,24 @@
   "create_table_options": null,
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": false,
-  "hash": "A6903609B77A1B0A551DD6BE8DB8F8F227C53F2E83EC4BD5477404B65EF60B63",
-  "identities": [],
+  "has_create_action": true,
+  "hash": "BB3ADCE1099B7F0E1BE461C875664B3584F2B18004B436E3546DD7CE31395D44",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "lojas_unique_nome_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "nome"
+        }
+      ],
+      "name": "unique_nome",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,

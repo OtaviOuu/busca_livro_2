@@ -25,6 +25,18 @@
       "type": "text"
     },
     {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "precision": null,
+      "primary_key?": false,
+      "references": null,
+      "scale": null,
+      "size": null,
+      "source": "image_url",
+      "type": "text"
+    },
+    {
       "allow_nil?": false,
       "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
       "generated?": false,
@@ -56,7 +68,7 @@
       "primary_key?": false,
       "references": {
         "deferrable": false,
-        "destination_attribute": "id",
+        "destination_attribute": "nome",
         "destination_attribute_default": null,
         "destination_attribute_generated": null,
         "index?": false,
@@ -68,7 +80,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "livros_loja_id_fkey",
+        "name": "livros_loja_nome_fkey",
         "on_delete": null,
         "on_update": null,
         "primary_key?": true,
@@ -77,8 +89,8 @@
       },
       "scale": null,
       "size": null,
-      "source": "loja_id",
-      "type": "uuid"
+      "source": "loja_nome",
+      "type": "text"
     }
   ],
   "base_filter": null,
@@ -86,8 +98,8 @@
   "create_table_options": null,
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": false,
-  "hash": "9CD767A67D1C479F2BB55BEC9B4E85287083B4A3521C9BE17F62C7C128AB7FF0",
+  "has_create_action": true,
+  "hash": "60132C30CDAFC6EF5AECAED586B7B6949854DAFA198B78DD5C7A5ECAF4BB91AB",
   "identities": [],
   "multitenancy": {
     "attribute": null,

@@ -65,22 +65,9 @@ defmodule BuscaLivro.Livros.Actions.ScrapeEstanteVirtual do
   defp extract_book_info(%{
          "name" => name,
          "productCode" => product_code,
-         "imageDetail" => image_detail
+         "image" => image_url
        }) do
-    case BuscaLivro.Livros.EstanteVirtualLivroType.new(
-           titulo: name,
-           sku: product_code,
-           url: image_detail
-         ) do
-      {:ok, book_info} ->
-        Logger.info("Extracted book info: #{inspect(book_info)}")
-
-        %{titulo: book_info.titulo}
-
-      {:error, reason} ->
-        Logger.error("Failed to create book info struct: #{inspect(reason)}")
-        nil
-    end
+    %{titulo: name, image_url: image_url, loja_nome: "Estante Virtual"}
   end
 
   defp extract_book_info(_), do: nil

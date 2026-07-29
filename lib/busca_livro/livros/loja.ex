@@ -9,10 +9,14 @@ defmodule BuscaLivro.Livros.Loja do
     repo BuscaLivro.Repo
   end
 
-  attributes do
-    uuid_v7_primary_key :id
+  actions do
+    defaults [:create, :read, :update, :destroy]
+    default_accept [:nome, :url]
+  end
 
+  attributes do
     attribute :nome, :string do
+      primary_key? true
       allow_nil? false
     end
 
@@ -27,8 +31,12 @@ defmodule BuscaLivro.Livros.Loja do
   relationships do
     has_many :livros, BuscaLivro.Livros.Livro do
       description "livros coletados na loja"
-      source_attribute :id
-      destination_attribute :loja_id
+      source_attribute :nome
+      destination_attribute :loja_nome
     end
+  end
+
+  identities do
+    identity :unique_nome, [:nome]
   end
 end

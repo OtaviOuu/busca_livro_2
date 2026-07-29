@@ -2,7 +2,12 @@ defmodule BuscaLivro.Livros.Livro do
   use Ash.Resource,
     otp_app: :busca_livro,
     domain: BuscaLivro.Livros,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshAdmin.Resource]
+
+  admin do
+    show_calculations [:full_image_url]
+  end
 
   postgres do
     table "livros"
@@ -11,7 +16,7 @@ defmodule BuscaLivro.Livros.Livro do
 
   actions do
     defaults [:create, :read, :update, :destroy]
-    default_accept [:titulo]
+    default_accept [:titulo, :image_url, :loja_nome]
 
     action :scrape_estante_virtual, {:array, :map} do
       run BuscaLivro.Livros.Actions.ScrapeEstanteVirtual
@@ -32,14 +37,23 @@ defmodule BuscaLivro.Livros.Livro do
       allow_nil? false
     end
 
+    attribute :image_url, :string do
+      allow_nil? true
+    end
+
     timestamps()
   end
 
   relationships do
     belongs_to :loja, BuscaLivro.Livros.Loja do
       description "loja que vende o livro"
-      source_attribute :loja_id
-      destination_attribute :id
+      attribute_type :string
+      source_attribute :loja_nome
+      destination_attribute :nome
     end
+  end
+
+  calculations do
+    calculate :full_image_url, :string, expr(loja.url <> image_url)
   end
 end
