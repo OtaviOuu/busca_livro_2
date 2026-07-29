@@ -10,12 +10,15 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
       <Cinder.collection
         query={
           Ash.Query.for_read(BuscaLivro.Livros.Livro, :read)
-          |> Ash.Query.load([:loja, :full_image_url])
+          |> Ash.Query.load([:loja, :full_image_url, :preco_formatado])
         }
         layout={:grid}
         grid_columns={2}
       >
         <:col field="titulo" search />
+
+        <:col field="preco" sort />
+
         <:col field="descricao" filter />
 
         <:filter field="loja.nome" />
@@ -44,6 +47,9 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
 
             <div class="badge badge-outline">
               {livro.loja.nome}
+            </div>
+            <div class="badge badge-outline">
+              {livro.preco_formatado}
             </div>
           </div>
         </:item>

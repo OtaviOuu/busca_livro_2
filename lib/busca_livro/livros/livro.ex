@@ -28,7 +28,7 @@ defmodule BuscaLivro.Livros.Livro do
 
   actions do
     defaults [:create, :read, :update, :destroy]
-    default_accept [:titulo, :image_url, :loja_nome, :descricao]
+    default_accept [:titulo, :image_url, :loja_nome, :descricao, :preco]
 
     action :scrape_shopee, {:array, :map} do
       run BuscaLivro.Livros.Actions.ScrapeShopee
@@ -58,10 +58,12 @@ defmodule BuscaLivro.Livros.Livro do
                   %Ash.BulkResult{status: :success} ->
                     {:ok, records}
 
-                  %Ash.BulkResult{status: :partial_success} ->
+                  %Ash.BulkResult{status: :partial_success, errors: errors} ->
+                    dbg(errors)
                     {:ok, records}
 
                   %Ash.BulkResult{status: :error, errors: errors} ->
+                    dbg(errors)
                     {:error, errors}
                 end
               end)
@@ -83,6 +85,10 @@ defmodule BuscaLivro.Livros.Livro do
       allow_nil? true
     end
 
+    attribute :preco, :integer do
+      allow_nil? true
+    end
+
     timestamps()
   end
 
@@ -97,5 +103,9 @@ defmodule BuscaLivro.Livros.Livro do
 
   calculations do
     calculate :full_image_url, :string, expr(loja.url <> image_url)
+
+    calculate :preco_formatado,
+              :string,
+              expr(fragment("to_char(?::numeric / 100, 'L999G999D99')", preco))
   end
 end
