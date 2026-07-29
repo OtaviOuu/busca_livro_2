@@ -3,7 +3,7 @@ defmodule BuscaLivro.Livros.Livro do
     otp_app: :busca_livro,
     domain: BuscaLivro.Livros,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshAdmin.Resource]
+    extensions: [AshAdmin.Resource, AshOban]
 
   admin do
     show_calculations [:full_image_url]
@@ -12,6 +12,18 @@ defmodule BuscaLivro.Livros.Livro do
   postgres do
     table "livros"
     repo BuscaLivro.Repo
+  end
+
+  oban do
+    scheduled_actions do
+      schedule :scrape_shopee,
+               "@daily",
+               queue: :default
+
+      schedule :scrape_estante_virtual,
+               "@daily",
+               queue: :default
+    end
   end
 
   actions do
