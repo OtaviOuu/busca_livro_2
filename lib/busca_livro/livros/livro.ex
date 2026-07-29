@@ -9,6 +9,22 @@ defmodule BuscaLivro.Livros.Livro do
     repo BuscaLivro.Repo
   end
 
+  actions do
+    defaults [:create, :read, :update, :destroy]
+    default_accept [:titulo]
+
+    action :scrape_estante_virtual, {:array, :map} do
+      run BuscaLivro.Livros.Actions.ScrapeEstanteVirtual
+
+      prepare after_action(fn query, records, _context ->
+                case Ash.bulk_create(records, BuscaLivro.Livros.Livro, :create) do
+                  %Ash.BulkResult{status: :success} -> {:ok, records}
+                  _ -> {:error, "Erro ao criar livros"}
+                end
+              end)
+    end
+  end
+
   attributes do
     uuid_v7_primary_key :id
 
