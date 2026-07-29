@@ -21,6 +21,14 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
         <:item :let={livro}>
           <figure class="p-4">
             <img
+              :if={livro.loja.nome == "Shopee"}
+              src={livro.image_url}
+              alt={livro.titulo}
+              class="h-48 w-auto object-contain"
+            />
+
+            <img
+              :if={livro.loja.nome != "Shopee"}
               src={livro.full_image_url}
               alt={livro.titulo}
               class="h-48 w-auto object-contain"

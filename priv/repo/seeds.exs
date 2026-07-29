@@ -9,3 +9,14 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+BuscaLivro.Livros.Loja
+|> Ash.Changeset.for_create(:create, %{nome: "Shopee", url: "https://shopee.com.br"})
+|> Ash.create!()
+
+BuscaLivro.Livros.Loja
+|> Ash.Changeset.for_create(:create, %{
+  nome: "Estante Virtual",
+  url: "https://www.estantevirtual.com.br"
+})
+|> Ash.create!()

@@ -2,14 +2,19 @@ defmodule BuscaLivro.Livros.Actions.ScrapeEstanteVirtual do
   use Ash.Resource.Actions.Implementation
 
   @domain "https://www.estantevirtual.com.br"
-  @url @domain <> "/ciencias-exatas"
+  @url @domain <> "/ciencias-exatas?tipo-de-livro=usado&sort=new-releases"
 
   require Logger
 
   def run(input, opts, context) do
     Logger.info("Scraping Estante Virtual for books...")
 
-    case Req.get(@url) do
+    headers = [
+      {"User-Agent",
+       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"}
+    ]
+
+    case Req.get(@url, headers: headers) do
       {:ok, %Req.Response{status: 200, body: body}} ->
         body
         |> parse_books_html()
@@ -31,7 +36,7 @@ defmodule BuscaLivro.Livros.Actions.ScrapeEstanteVirtual do
     case Floki.parse_document(body) do
       {:ok, document} ->
         document
-        |> Floki.find(".product-list .product-item.product-list__item")
+        |> Floki.find(".product-item.product-list__item")
 
       {:error, reason} ->
         {:error, "Failed to parse HTML: #{inspect(reason)}"}
@@ -55,7 +60,7 @@ defmodule BuscaLivro.Livros.Actions.ScrapeEstanteVirtual do
         |> Enum.map(&extract_book_info/1)
 
       {:ok, %Req.Response{status: status}} ->
-        {:error, "Request failed with status #{status} for book code #{book_code}"}
+        nil
 
       {:error, reason} ->
         {:error, "Request failed with reason: #{inspect(reason)} for book code #{book_code}"}
