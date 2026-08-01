@@ -3,7 +3,12 @@ defmodule BuscaLivro.Livros.Livro do
     otp_app: :busca_livro,
     domain: BuscaLivro.Livros,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshAdmin.Resource, AshOban]
+    extensions: [AshJsonApi.Resource, AshAdmin.Resource, AshOban]
+
+  json_api do
+    type "livro"
+    includes [:loja]
+  end
 
   admin do
     show_calculations [:full_image_url]
@@ -74,18 +79,24 @@ defmodule BuscaLivro.Livros.Livro do
     uuid_v7_primary_key :id
 
     attribute :titulo, :string do
+      public? true
       allow_nil? false
     end
 
     attribute :image_url, :string do
+      public? true
+
       allow_nil? true
     end
 
     attribute :descricao, :string do
+      public? true
+
       allow_nil? true
     end
 
     attribute :preco, :integer do
+      public? true
       allow_nil? true
     end
 
@@ -94,6 +105,7 @@ defmodule BuscaLivro.Livros.Livro do
 
   relationships do
     belongs_to :loja, BuscaLivro.Livros.Loja do
+      public? true
       description "loja que vende o livro"
       attribute_type :string
       source_attribute :loja_nome

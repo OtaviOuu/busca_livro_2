@@ -2,7 +2,13 @@ defmodule BuscaLivro.Livros.Loja do
   use Ash.Resource,
     otp_app: :busca_livro,
     domain: BuscaLivro.Livros,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshJsonApi.Resource]
+
+  json_api do
+    type "loja"
+    includes [:livros]
+  end
 
   postgres do
     table "lojas"
@@ -16,11 +22,14 @@ defmodule BuscaLivro.Livros.Loja do
 
   attributes do
     attribute :nome, :string do
+      public? true
       primary_key? true
       allow_nil? false
     end
 
     attribute :url, :string do
+      public? true
+
       description "url base da loja"
       allow_nil? false
     end
@@ -30,6 +39,7 @@ defmodule BuscaLivro.Livros.Loja do
 
   relationships do
     has_many :livros, BuscaLivro.Livros.Livro do
+      public? true
       description "livros coletados na loja"
       source_attribute :nome
       destination_attribute :loja_nome
