@@ -1,5 +1,6 @@
 [
   import_deps: [
+    :ash_json_api,
     :cinder,
     :ash_oban,
     :oban,
