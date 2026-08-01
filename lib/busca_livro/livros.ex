@@ -19,5 +19,7 @@ defmodule BuscaLivro.Livros do
   resources do
     resource BuscaLivro.Livros.Livro
     resource BuscaLivro.Livros.Loja
+    resource BuscaLivro.Livros.Pedido
+    resource BuscaLivro.Livros.UserPedido
   end
 end
