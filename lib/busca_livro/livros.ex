@@ -1,7 +1,7 @@
 defmodule BuscaLivro.Livros do
   use Ash.Domain,
     otp_app: :busca_livro,
-    extensions: [AshJsonApi.Domain, AshAdmin.Domain, AshGraphql.Domain]
+    extensions: [AshJsonApi.Domain, AshAdmin.Domain, AshGraphql.Domain, AshPhoenix]
 
   json_api do
     routes do
@@ -25,6 +25,8 @@ defmodule BuscaLivro.Livros do
       define :list_pedidos_by_user, action: :read, args: [:user_id]
     end
 
-    resource BuscaLivro.Livros.UserPedido
+    resource BuscaLivro.Livros.UserPedido do
+      define :associar_user_com_pedido_existente, action: :associar_user_com_pedido_existente
+    end
   end
 end

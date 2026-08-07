@@ -7,6 +7,16 @@ defmodule BuscaLivroWeb.PerfilLive.Index do
   def render(assigns) do
     ~H"""
     <Layouts.app {assigns}>
+      <.header>
+        <:actions>
+          <.link
+            navigate={~p"/pedidos/new"}
+            class="btn btn-primary"
+          >
+            oki
+          </.link>
+        </:actions>
+      </.header>
       <Cinder.collection
         actor={@current_user}
         query_opts={[]}

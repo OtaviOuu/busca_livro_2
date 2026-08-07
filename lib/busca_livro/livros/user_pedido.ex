@@ -2,7 +2,8 @@ defmodule BuscaLivro.Livros.UserPedido do
   use Ash.Resource,
     otp_app: :busca_livro,
     domain: BuscaLivro.Livros,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshPhoenix]
 
   postgres do
     table "user_pedidos"
@@ -12,12 +13,14 @@ defmodule BuscaLivro.Livros.UserPedido do
   actions do
     defaults [:read, :update, :destroy]
 
-    create :usar_pedido_existente do
-      argument :pedido, :map do
+    create :associar_user_com_pedido_existente do
+      description "Associa um usuário a um pedido existente"
+
+      argument :pedido, :uuid do
         allow_nil? false
       end
 
-      change manage_relationship(:pedido, type: :append_and_remove)
+      change manage_relationship(:pedido, type: :append)
       change relate_actor(:user, field: :id)
     end
 
@@ -36,13 +39,12 @@ defmodule BuscaLivro.Livros.UserPedido do
   relationships do
     belongs_to :user, BuscaLivro.Accounts.User do
       allow_nil? false
-      primary_key? true
       destination_attribute :id
     end
 
     belongs_to :pedido, BuscaLivro.Livros.Pedido do
       allow_nil? false
-      primary_key? true
+
       destination_attribute :id
     end
   end
