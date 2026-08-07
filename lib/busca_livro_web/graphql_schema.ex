@@ -2,7 +2,7 @@ defmodule BuscaLivroWeb.GraphqlSchema do
   use Absinthe.Schema
 
   use AshGraphql,
-    domains: []
+    domains: [BuscaLivro.Livros]
 
   import_types Absinthe.Plug.Types
 
