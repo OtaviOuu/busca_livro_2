@@ -21,7 +21,9 @@ defmodule BuscaLivro.Application do
       # {BuscaLivro.Worker, arg},
       # Start to serve requests, typically the last entry
       BuscaLivroWeb.Endpoint,
-      {AshAuthentication.Supervisor, [otp_app: :busca_livro]}
+      {AshAuthentication.Supervisor, [otp_app: :busca_livro]},
+      {Absinthe.Subscription, BuscaLivroWeb.Endpoint},
+      AshGraphql.Subscription.Batcher
     ]
 
     # See https://elixir.hexdocs.pm/Supervisor.html
