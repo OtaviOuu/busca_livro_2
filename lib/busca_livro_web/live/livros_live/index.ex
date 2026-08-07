@@ -20,8 +20,14 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
       >
         <:col field="titulo" search sort filter />
         <:col field="preco" sort filter />
-        <:filter field="loja.nome" />
 
+        <:col
+          field="loja.nome"
+          filter={[
+            type: :select,
+            options: [{"Shopee", "Shopee"}, {"Estante Virtual", "Estante Virtual"}]
+          ]}
+        />
         <:controls :let={controls}>
           <%!-- Search --%>
           <div class="px-4 pt-4 pb-3">

@@ -62,6 +62,10 @@ defmodule BuscaLivro.Livros.Livro do
                   %Ash.BulkResult{status: :partial_success, errors: errors} = result ->
                     dbg(errors)
                     {:ok, records}
+
+                  result ->
+                    dbg(result)
+                    {:error, result}
                 end
               end)
     end

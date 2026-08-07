@@ -25,8 +25,15 @@ defmodule BuscaLivro.Livros.Actions.ScrapeShopee do
 
     price =
       product_html
-      |> Floki.find(".truncate.font-medium")
+      |> Floki.find(".max-w-full.text-shopee-primary .truncate.font-medium")
       |> Floki.text()
+      |> String.replace(".", "")
+      |> String.replace(",", ".")
+      |> Float.parse()
+      |> case do
+        {value, _} -> round(value * 100)
+        :error -> nil
+      end
 
     image_url =
       product_html
@@ -37,9 +44,9 @@ defmodule BuscaLivro.Livros.Actions.ScrapeShopee do
     %{
       titulo: titulo,
       image_url: image_url,
-      loja_nome: "Shopee"
+      loja_nome: "Shopee",
+      preco: price
     }
-    |> dbg
   end
 
   defp htlv_html_tree do
@@ -49,9 +56,10 @@ defmodule BuscaLivro.Livros.Actions.ScrapeShopee do
       import nodriver
 
       async def main():
-          browser = await nodriver.start(lang="pt-BR")
+          browser = await nodriver.start(lang="pt-BR", user_data_dir="./browser_data"
+      )
 
-          page = await browser.get('https://shopee.com.br/search?fe_filter_options=%5B%7B%22group_name%22%3A%22CONDITION%22%2C%22values%22%3A%5B%22USED_ITEM%22%5D%7D%2C%7B%22group_name%22%3A%22FACET%22%2C%22values%22%3A%5B%2211060478%22%5D%7D%5D&page=0&sortBy=ctime')
+          page = await browser.get('https://shopee.com.br/search?fe_filter_options=[{"group_name":"CONDITION","values":["USED_ITEM"]},{"group_name":"FACET","values":["11060478"]}]&page=0&sortBy=ctime')
 
           await asyncio.sleep(8)
           await page.scroll_down(1000)

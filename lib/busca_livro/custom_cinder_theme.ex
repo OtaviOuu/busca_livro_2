@@ -9,7 +9,7 @@ defmodule BuscaLivro.CustomCinderTheme do
   set :grid_container_class, "grid gap-4"
 
   # --- Controls wrapper (envolve :controls slot + sort) ---
-  set :controls_class, "card bg-base-100 border border-base-300 shadow-sm mb-4 overflow-hidden"
+  set :controls_class, "card bg-base-100 border border-base-300 shadow-sm mb-4"
 
   # Zera o wrapper que o Cinder coloca em volta do <:controls> slot
   set :filter_container_class, ""
