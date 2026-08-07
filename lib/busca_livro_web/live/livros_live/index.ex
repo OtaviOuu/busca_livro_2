@@ -70,13 +70,7 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
         <img
           src={if(@livro.loja.nome == "Shopee", do: @livro.image_url, else: @livro.full_image_url)}
           alt={@livro.titulo}
-          class={[
-            "w-full h-full group-hover:scale-105 transition-transform duration-300",
-            if(@livro.loja.nome == "Shopee",
-              do: "object-cover",
-              else: "object-contain p-2"
-            )
-          ]}
+          class="w-full h-full group-hover:scale-105 transition-transform duration-300"
         />
         <%!-- Gradiente sutil na borda direita para separar da área de texto --%>
         <div class="absolute inset-y-0 right-0 w-4 bg-gradient-to-r from-transparent to-base-200/40" />
@@ -118,12 +112,6 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
           <div>
             <span class="text-primary font-bold text-sm">
               {@livro.preco_formatado}
-            </span>
-            <span
-              :if={@livro.loja.nome == "Estante Virtual"}
-              class="block text-xs text-base-content/40"
-            >
-              + frete
             </span>
           </div>
           <a
