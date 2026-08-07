@@ -17,6 +17,14 @@ defmodule BuscaLivro.Livros.Pedido do
   actions do
     defaults [:create, :read, :update, :destroy]
     default_accept [:texto]
+
+    read :by_user do
+      argument :user_id, :uuid do
+        allow_nil? false
+      end
+
+      filter expr(users.id == ^arg(:user_id))
+    end
   end
 
   attributes do
@@ -32,6 +40,7 @@ defmodule BuscaLivro.Livros.Pedido do
 
   relationships do
     many_to_many :users, BuscaLivro.Accounts.User do
+      public? true
       through BuscaLivro.Livros.UserPedido
       source_attribute_on_join_resource :pedido_id
       destination_attribute_on_join_resource :user_id
@@ -39,6 +48,8 @@ defmodule BuscaLivro.Livros.Pedido do
   end
 
   aggregates do
-    count :users_count, :users
+    count :users_count, :users do
+      public? true
+    end
   end
 end

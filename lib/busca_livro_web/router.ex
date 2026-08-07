@@ -53,7 +53,7 @@ defmodule BuscaLivroWeb.Router do
     pipe_through :browser
 
     live "/livros", LivrosLive.Index, :index
-
+    live "/perfil", PerfilLive.Index, :index
     auth_routes AuthController, BuscaLivro.Accounts.User, path: "/auth"
     sign_out_route AuthController
 

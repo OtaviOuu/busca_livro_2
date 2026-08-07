@@ -19,7 +19,12 @@ defmodule BuscaLivro.Livros do
   resources do
     resource BuscaLivro.Livros.Livro
     resource BuscaLivro.Livros.Loja
-    resource BuscaLivro.Livros.Pedido
+
+    resource BuscaLivro.Livros.Pedido do
+      define :list_pedidos, action: :read
+      define :list_pedidos_by_user, action: :read, args: [:user_id]
+    end
+
     resource BuscaLivro.Livros.UserPedido
   end
 end
