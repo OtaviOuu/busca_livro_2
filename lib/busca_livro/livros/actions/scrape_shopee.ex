@@ -1,9 +1,6 @@
 defmodule BuscaLivro.Livros.Actions.ScrapeShopee do
   use Ash.Resource.Actions.Implementation
 
-  @domain "https://www.estantevirtual.com.br"
-  @url @domain <> "/ciencias-exatas"
-
   require Logger
 
   def run(input, opts, context) do
@@ -33,18 +30,16 @@ defmodule BuscaLivro.Livros.Actions.ScrapeShopee do
 
     image_url =
       product_html
-      |> Floki.find(".contents picture source")
-      |> Floki.attribute("srcset")
+      |> Floki.find("img")
+      |> Floki.attribute("src")
       |> List.first()
-      |> dbg
-
-    dbg(price)
 
     %{
       titulo: titulo,
       image_url: image_url,
       loja_nome: "Shopee"
     }
+    |> dbg
   end
 
   defp htlv_html_tree do

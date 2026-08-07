@@ -32,8 +32,19 @@ defmodule BuscaLivro.Livros.Livro do
   end
 
   actions do
-    defaults [:create, :read, :update, :destroy]
+    defaults [:create, :update, :destroy]
     default_accept [:titulo, :image_url, :loja_nome, :descricao, :preco]
+
+    read :read do
+      primary? true
+
+      pagination do
+        required? false
+        offset? false
+        keyset? true
+        countable true
+      end
+    end
 
     action :scrape_shopee, {:array, :map} do
       run BuscaLivro.Livros.Actions.ScrapeShopee

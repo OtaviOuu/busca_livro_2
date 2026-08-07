@@ -89,7 +89,6 @@ defmodule BuscaLivroWeb.Layouts do
             </ul>
           </div>
         <% else %>
-          <.link navigate={~p"/register"} class="btn btn-ghost btn-sm">Registrar</.link>
           <.link navigate={~p"/sign-in"} class="btn btn-primary btn-sm">Entrar</.link>
         <% end %>
       </div>

@@ -14,6 +14,7 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
         }
         layout={:grid}
         grid_columns={2}
+        page_size={20}
         theme={BuscaLivro.CustomCinderTheme}
         search={[label: "", placeholder: "Buscar livros..."]}
       >
@@ -60,49 +61,83 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
 
   defp livro_card(assigns) do
     ~H"""
-    <div class="group card bg-base-100 border border-base-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
-      <%!-- Imagem --%>
-      <figure class="relative bg-base-200 h-52 overflow-hidden">
+    <div class="group card card-side bg-base-100 border border-base-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
+      <%!-- Capa — proporção de livro (2:3) para Estante, quadrada para Shopee --%>
+      <figure class={[
+        "relative bg-base-200 shrink-0 overflow-hidden",
+        if(@livro.loja.nome == "Shopee", do: "w-28", else: "w-24")
+      ]}>
         <img
-          :if={@livro.loja.nome == "Shopee"}
-          src={@livro.image_url}
+          src={if(@livro.loja.nome == "Shopee", do: @livro.image_url, else: @livro.full_image_url)}
           alt={@livro.titulo}
-          class="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+          class={[
+            "w-full h-full group-hover:scale-105 transition-transform duration-300",
+            if(@livro.loja.nome == "Shopee",
+              do: "object-cover",
+              else: "object-contain p-2"
+            )
+          ]}
         />
-        <img
-          :if={@livro.loja.nome != "Shopee"}
-          src={@livro.full_image_url}
-          alt={@livro.titulo}
-          class="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
-        />
-        <%!-- Badge da loja --%>
-        <div class="absolute top-2 right-2">
-          <span class="badge badge-sm bg-base-100/90 backdrop-blur-sm border-base-300 text-base-content font-medium">
-            {@livro.loja.nome}
-          </span>
-        </div>
+        <%!-- Gradiente sutil na borda direita para separar da área de texto --%>
+        <div class="absolute inset-y-0 right-0 w-4 bg-gradient-to-r from-transparent to-base-200/40" />
       </figure>
 
       <%!-- Conteúdo --%>
-      <div class="card-body p-4 gap-2">
-        <h2 class="font-semibold text-sm leading-snug line-clamp-2 text-base-content">
+      <div class="card-body p-4 gap-1.5 min-w-0">
+        <%!-- Loja badge --%>
+        <div class="flex items-center gap-1.5">
+          <span class={[
+            "badge badge-xs font-medium",
+            if(@livro.loja.nome == "Shopee",
+              do: "badge-warning",
+              else: "badge-info"
+            )
+          ]}>
+            {@livro.loja.nome}
+          </span>
+          <span :if={@livro.loja.nome == "Estante Virtual"} class="badge badge-xs badge-ghost">
+            usado
+          </span>
+        </div>
+
+        <%!-- Título --%>
+        <h2 class="font-semibold text-sm leading-snug line-clamp-3 text-base-content">
           {@livro.titulo}
         </h2>
 
+        <%!-- Descrição — só Estante Virtual costuma ter --%>
         <p
           :if={@livro.descricao}
-          class="text-xs text-base-content/50 line-clamp-2 leading-relaxed"
+          class="text-xs text-base-content/40 line-clamp-2 leading-relaxed"
         >
           {@livro.descricao}
         </p>
 
+        <%!-- Preço + botão --%>
         <div class="flex items-center justify-between mt-auto pt-2 border-t border-base-300/60">
-          <span class="text-primary font-bold text-base">
-            {@livro.preco_formatado}
-          </span>
-          <button class="btn btn-primary btn-xs gap-1">
-            <.icon name="hero-shopping-cart" class="size-3" /> Comprar
-          </button>
+          <div>
+            <span class="text-primary font-bold text-sm">
+              {@livro.preco_formatado}
+            </span>
+            <span
+              :if={@livro.loja.nome == "Estante Virtual"}
+              class="block text-xs text-base-content/40"
+            >
+              + frete
+            </span>
+          </div>
+          <a
+            href={
+              if @livro.loja.nome == "Shopee",
+                do: @livro.image_url,
+                else: @livro.full_image_url
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary btn-xs gap-1"
+          >
+            <.icon name="hero-arrow-top-right-on-square" class="size-3" /> Ver
+          </a>
         </div>
       </div>
     </div>
