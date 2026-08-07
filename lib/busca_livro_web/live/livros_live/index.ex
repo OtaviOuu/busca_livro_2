@@ -19,6 +19,8 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
         search={[label: "", placeholder: "Buscar livros..."]}
       >
         <:col field="titulo" search sort filter />
+        <:col field="descricao" sort filter />
+
         <:col field="preco" sort filter />
 
         <:col
