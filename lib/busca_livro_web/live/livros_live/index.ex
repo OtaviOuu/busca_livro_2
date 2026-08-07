@@ -63,6 +63,10 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
     """
   end
 
+  defp loja_badge_class("Shopee"), do: "badge-warning"
+  defp loja_badge_class("Estante Virtual"), do: "badge-info"
+  defp loja_badge_class(_), do: "badge-info"
+
   attr :livro, :map, required: true
 
   defp livro_card(assigns) do
@@ -86,17 +90,8 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
       <div class="card-body p-4 gap-1.5 min-w-0">
         <%!-- Loja badge --%>
         <div class="flex items-center gap-1.5">
-          <span class={[
-            "badge badge-xs font-medium",
-            if(@livro.loja.nome == "Shopee",
-              do: "badge-warning",
-              else: "badge-info"
-            )
-          ]}>
+          <span class={["badge badge-xs font-medium", loja_badge_class(@livro.loja.nome)]}>
             {@livro.loja.nome}
-          </span>
-          <span :if={@livro.loja.nome == "Estante Virtual"} class="badge badge-xs badge-ghost">
-            usado
           </span>
         </div>
 
