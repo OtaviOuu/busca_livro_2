@@ -31,56 +31,72 @@ defmodule BuscaLivroWeb.Layouts do
     default: nil,
     doc: "the current [scope](https://phoenix.hexdocs.pm/scopes.html)"
 
+  attr :current_user, :map, default: nil
+
   slot :inner_block, required: true
 
   def app(assigns) do
     ~H"""
-    <div class="navbar bg-base-100 shadow-sm">
+    <header class="navbar bg-base-100/80 backdrop-blur-md border-b border-base-300/60 px-4 sm:px-6 sticky top-0 z-40">
       <div class="navbar-start">
-        <div class="dropdown">
-          <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            ><path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h7"
-            /></svg>
-          </div>
-          <ul
-            tabindex="-1"
-            class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-          >
-            <li :if={@current_user}>
-              <.link class="text-primary" navigate={~p"/sign-out"}>Sair</.link>
-            </li>
-          </ul>
-        </div>
-        <div :if={@current_user} class="ml-2 text-sm font-semibold">
-          {@current_user.email}
-        </div>
+        <.link navigate={~p"/livros"} class="flex items-center gap-2">
+          <.icon name="hero-book-open" class="size-5 text-primary" />
+          <span class="font-bold text-base tracking-tight">BuscaLivros</span>
+        </.link>
+      </div>
 
-        <div :if={!@current_user} class="ml-2 text-sm font-semibold">
-          <.link navigate={~p"/register"} class="btn btn-ghost btn-sm">
-            Registar
-          </.link>
-        </div>
+      <div class="navbar-center hidden md:flex">
+        <ul class="menu menu-horizontal gap-1 px-0">
+          <li>
+            <.link navigate={~p"/livros"} class="btn btn-ghost btn-sm">Livros</.link>
+          </li>
+          <li>
+            <.link navigate={~p"/perfil"} class="btn btn-ghost btn-sm">Meu Perfil</.link>
+          </li>
+        </ul>
       </div>
-      <div class="navbar-center">
-        <a class="btn btn-ghost text-xl">BuscaLivros</a>
-      </div>
-      <div class="navbar-end">
+
+      <div class="navbar-end gap-2">
         <.theme_toggle />
-      </div>
-    </div>
 
-    <main class="px-4 py-20 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-4xl space-y-4">
+        <%= if @current_user do %>
+          <div class="dropdown dropdown-end">
+            <button tabindex="0" class="btn btn-ghost btn-circle avatar placeholder">
+              <div class="bg-primary text-primary-content rounded-full size-8 flex items-center justify-center text-sm font-bold">
+                {String.upcase(String.slice(to_string(@current_user.email), 0, 1))}
+              </div>
+            </button>
+            <ul
+              tabindex="0"
+              class="dropdown-content menu bg-base-100 border border-base-300 rounded-box shadow-lg z-50 mt-2 w-48 p-2"
+            >
+              <li class="px-3 py-1.5">
+                <span class="text-xs text-base-content/50 truncate block">
+                  {@current_user.email}
+                </span>
+              </li>
+              <div class="my-1 h-px bg-base-300" />
+              <li>
+                <.link navigate={~p"/perfil"}>
+                  <.icon name="hero-user" class="size-4" /> Meu Perfil
+                </.link>
+              </li>
+              <li>
+                <.link href={~p"/auth/sign-out"} method="delete" class="text-error">
+                  <.icon name="hero-arrow-right-on-rectangle" class="size-4" /> Sair
+                </.link>
+              </li>
+            </ul>
+          </div>
+        <% else %>
+          <.link navigate={~p"/register"} class="btn btn-ghost btn-sm">Registrar</.link>
+          <.link navigate={~p"/sign-in"} class="btn btn-primary btn-sm">Entrar</.link>
+        <% end %>
+      </div>
+    </header>
+
+    <main class="px-4 py-8 sm:px-6">
+      <div class="mx-auto max-w-5xl space-y-4">
         {render_slot(@inner_block)}
       </div>
     </main>
