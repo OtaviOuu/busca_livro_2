@@ -6,41 +6,52 @@ defmodule BuscaLivro.Livros.Actions.ScrapeEstanteVirtual do
 
   require Logger
 
-  def run(input, opts, context) do
+  def run(_input, _opts, _context) do
     Logger.info("Scraping Estante Virtual for books...")
 
-    headers = [
-      {"User-Agent",
-       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"}
-    ]
-
-    case Req.get(@url, headers: headers) do
-      {:ok, %Req.Response{status: 200, body: body}} ->
-        body
-        |> parse_books_html()
-        |> Enum.map(&extract_book_code/1)
-        |> Enum.map(&get_book_details/1)
-        |> Enum.reject(&is_nil/1)
-        |> List.flatten()
-        |> then(&{:ok, &1})
-
-      {:ok, %Req.Response{status: status}} ->
-        {:error, "Request failed with status #{status}"}
-
-      {:error, reason} ->
-        {:error, "Request failed with reason: #{inspect(reason)}"}
-    end
+    fetch_book_codes()
+    |> Task.async_stream(&get_book_details/1,
+      max_concurrency: 10,
+      timeout: :infinity,
+      on_timeout: :kill_task
+    )
+    |> Enum.flat_map(fn
+      {:ok, nil} -> []
+      {:ok, {:error, _}} -> []
+      {:ok, list} when is_list(list) -> list
+      _ -> []
+    end)
+    |> then(&{:ok, &1})
   end
 
-  defp parse_books_html(body) do
-    case Floki.parse_document(body) do
-      {:ok, document} ->
-        document
-        |> Floki.find(".product-item.product-list__item")
+  defp fetch_book_codes do
+    {result, _globals} =
+      """
+      import asyncio
+      import nodriver
 
-      {:error, reason} ->
-        {:error, "Failed to parse HTML: #{inspect(reason)}"}
-    end
+      async def main():
+          browser = await nodriver.start(lang="pt-BR", user_data_dir="./browser_data")
+
+          page = await browser.get('#{@url}')
+
+          await asyncio.sleep(8)
+          await page.scroll_down(1000)
+          html = await page.get_content()
+
+          await page.close()
+          return html
+
+      r = asyncio.run(main())
+      r
+      """
+      |> Pythonx.eval(%{})
+
+    Pythonx.decode(result)
+    |> Floki.parse_document!()
+    |> Floki.find(".product-item.product-list__item")
+    |> Enum.map(&extract_book_code/1)
+    |> Enum.reject(&is_nil/1)
   end
 
   defp extract_book_code(book_item) do
@@ -59,7 +70,7 @@ defmodule BuscaLivro.Livros.Actions.ScrapeEstanteVirtual do
         |> Map.get("parentSkus")
         |> Enum.map(&extract_book_info/1)
 
-      {:ok, %Req.Response{status: status}} ->
+      {:ok, %Req.Response{status: _status}} ->
         nil
 
       {:error, reason} ->
@@ -69,7 +80,7 @@ defmodule BuscaLivro.Livros.Actions.ScrapeEstanteVirtual do
 
   defp extract_book_info(%{
          "name" => name,
-         "productCode" => product_code,
+         "productCode" => _product_code,
          "image" => image_url,
          "description" => descricao,
          "salePrice" => preco
