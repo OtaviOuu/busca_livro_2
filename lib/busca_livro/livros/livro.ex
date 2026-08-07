@@ -8,6 +8,7 @@ defmodule BuscaLivro.Livros.Livro do
   json_api do
     type "livro"
     includes [:loja]
+    default_fields [:titulo, :image_url, :descricao, :preco, :preco_formatado]
   end
 
   admin do
@@ -37,6 +38,8 @@ defmodule BuscaLivro.Livros.Livro do
 
     read :read do
       primary? true
+
+      prepare build(load: [:preco_formatado])
 
       pagination do
         required? false
@@ -131,8 +134,8 @@ defmodule BuscaLivro.Livros.Livro do
   calculations do
     calculate :full_image_url, :string, expr(loja.url <> image_url)
 
-    calculate :preco_formatado,
-              :string,
-              expr(fragment("to_char(?::numeric / 100, 'L999G999D99')", preco))
+    calculate :preco_formatado, :decimal, expr(round(preco / 100, 2)) do
+      public? true
+    end
   end
 end
