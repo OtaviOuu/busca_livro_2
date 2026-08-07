@@ -82,7 +82,7 @@ defmodule BuscaLivroWeb.Layouts do
                 </.link>
               </li>
               <li>
-                <.link href={~p"/auth/sign-out"} method="delete" class="text-error">
+                <.link href={~p"/sign-out"} method="delete" class="text-error">
                   <.icon name="hero-arrow-right-on-rectangle" class="size-4" /> Sair
                 </.link>
               </li>
