@@ -15,6 +15,12 @@ defmodule BuscaLivro.Livros.Achado do
 
     read :by_user do
       filter expr(user_id == ^actor(:id))
+
+      pagination do
+        required? false
+        offset? true
+        keyset? true
+      end
     end
   end
 

@@ -46,6 +46,12 @@ defmodule BuscaLivro.Livros.Pedido do
       end
 
       filter expr(users.id == ^arg(:user_id))
+
+      pagination do
+        required? false
+        offset? true
+        keyset? true
+      end
     end
   end
 
