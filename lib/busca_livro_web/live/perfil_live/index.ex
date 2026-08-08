@@ -13,7 +13,7 @@ defmodule BuscaLivroWeb.PerfilLive.Index do
             navigate={~p"/pedidos/new"}
             class="btn btn-primary"
           >
-            oki
+            Criar Pedido
           </.link>
         </:actions>
       </.header>
