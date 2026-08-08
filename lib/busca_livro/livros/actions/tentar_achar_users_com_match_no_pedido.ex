@@ -15,10 +15,6 @@ defmodule BuscaLivro.Livros.Actions.TentarAcharUsersComMatchNoPedido do
       |> Enum.uniq_by(& &1.id)
       |> load_users()
 
-    Enum.each(users, fn user ->
-      Logger.info("Match encontrado: user #{user.email} para o livro '#{livro.titulo}'")
-    end)
-
     {:ok, users}
   end
 

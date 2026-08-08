@@ -53,6 +53,9 @@ defmodule BuscaLivroWeb.Layouts do
           <li>
             <.link navigate={~p"/perfil"} class="btn btn-ghost btn-sm">Meu Perfil</.link>
           </li>
+          <li>
+            <.link navigate={~p"/achados"} class="btn btn-ghost btn-sm">Achados</.link>
+          </li>
         </ul>
       </div>
 

@@ -71,6 +71,8 @@ defmodule BuscaLivroWeb.Router do
     live "/livros", LivrosLive.Index, :index
     live "/perfil", PerfilLive.Index, :index
 
+    live "/achados", AchadosLive.Index, :index
+
     live "/pedidos/new", PedidosLive.New, :new
 
     auth_routes AuthController, BuscaLivro.Accounts.User, path: "/auth"

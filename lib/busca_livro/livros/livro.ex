@@ -5,6 +5,8 @@ defmodule BuscaLivro.Livros.Livro do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshJsonApi.Resource, AshAdmin.Resource, AshOban, AshGraphql.Resource]
 
+  require Logger
+
   graphql do
     type :livro
 
@@ -56,7 +58,31 @@ defmodule BuscaLivro.Livros.Livro do
                     )
                     |> Ash.run_action() do
                  {:ok, users} ->
-                   {:ok, result}
+                   args = Enum.map(users, fn user -> %{livro_id: result.id, user_id: user.id} end)
+
+                   case Ash.bulk_create(args, BuscaLivro.Livros.Achado, :create,
+                          rollback_on_error?: false,
+                          stop_on_error?: false
+                        ) do
+                     %Ash.BulkResult{status: :success} ->
+                       Logger.info("Achados criados com sucesso para o livro '#{result.titulo}'")
+
+                       {:ok, result}
+
+                     %Ash.BulkResult{status: :partial_success, errors: errors} ->
+                       Logger.warning(
+                         "Achados parcialmente criados para o livro '#{result.titulo}'. Erros: #{inspect(errors)}"
+                       )
+
+                       {:ok, result}
+
+                     %Ash.BulkResult{status: :error, errors: errors} ->
+                       Logger.error(
+                         "Erro ao criar achados para o livro '#{result.titulo}'. Erros: #{inspect(errors)}"
+                       )
+
+                       {:error, errors}
+                   end
 
                  {:error, error} ->
                    {:error, error}

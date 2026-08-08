@@ -31,5 +31,7 @@ defmodule BuscaLivro.Livros do
       define :associar_user_com_pedido_existente, action: :associar_user_com_pedido_existente
       define :create_pedido, action: :create
     end
+
+    resource BuscaLivro.Livros.Achado
   end
 end
