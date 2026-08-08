@@ -76,7 +76,7 @@ defmodule BuscaLivroWeb.AchadosLive.Index do
 
   defp achado_card(assigns) do
     ~H"""
-    <div class="group card card-side bg-base-100 border border-base-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
+    <div class="card card-side bg-base-100 border border-base-300 shadow-sm overflow-hidden">
       <%!-- Capa --%>
       <figure class={[
         "relative bg-base-200 shrink-0 overflow-hidden",
@@ -90,7 +90,7 @@ defmodule BuscaLivroWeb.AchadosLive.Index do
             )
           }
           alt={@achado.livro.titulo}
-          class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+          class="w-full h-full object-contain"
         />
         <div class="absolute inset-y-0 right-0 w-4 bg-gradient-to-r from-transparent to-base-200/40" />
       </figure>

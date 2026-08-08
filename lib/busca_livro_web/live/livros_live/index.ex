@@ -76,7 +76,7 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
 
   defp livro_card(assigns) do
     ~H"""
-    <div class="group card card-side bg-base-100 border border-base-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
+    <div class="card card-side bg-base-100 border border-base-300 shadow-sm overflow-hidden">
       <%!-- Capa — proporção de livro (2:3) para Estante, quadrada para Shopee --%>
       <figure class={[
         "relative bg-base-200 shrink-0 overflow-hidden",
@@ -85,7 +85,7 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
         <img
           src={if(@livro.loja.nome == "Shopee", do: @livro.image_url, else: @livro.full_image_url)}
           alt={@livro.titulo}
-          class="w-full h-full group-hover:scale-105 transition-transform duration-300"
+          class="w-full h-full"
         />
         <%!-- Gradiente sutil na borda direita para separar da área de texto --%>
         <div class="absolute inset-y-0 right-0 w-4 bg-gradient-to-r from-transparent to-base-200/40" />
