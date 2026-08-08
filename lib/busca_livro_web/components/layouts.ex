@@ -40,7 +40,6 @@ defmodule BuscaLivroWeb.Layouts do
     <header class="navbar bg-base-100/80 backdrop-blur-md border-b border-base-300/60 px-4 sm:px-6 sticky top-0 z-40">
       <div class="navbar-start">
         <.link navigate={~p"/livros"} class="flex items-center gap-2">
-          <.icon name="hero-book-open" class="size-5 text-primary" />
           <span class="font-bold text-base tracking-tight">BuscaLivros</span>
         </.link>
       </div>

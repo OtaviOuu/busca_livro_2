@@ -99,9 +99,6 @@ defmodule BuscaLivroWeb.AchadosLive.Index do
       <div class="card-body p-4 gap-2 min-w-0">
         <%!-- Badge da loja + selo "achado" --%>
         <div class="flex items-center gap-1.5">
-          <span class="badge badge-xs badge-success gap-1 font-medium">
-            <.icon name="hero-sparkles-mini" class="size-3" /> Achado
-          </span>
           <span class={["badge badge-xs font-medium", loja_badge_class(@achado.livro.loja.nome)]}>
             {@achado.livro.loja.nome}
           </span>
