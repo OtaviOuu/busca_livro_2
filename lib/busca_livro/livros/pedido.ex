@@ -23,6 +23,8 @@ defmodule BuscaLivro.Livros.Pedido do
         allow_nil? false
       end
 
+      prepare build(load: :users_count, limit: 5)
+
       filter expr(ilike(texto, "%" <> ^arg(:search_text) <> "%"))
     end
 
