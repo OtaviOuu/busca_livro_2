@@ -25,6 +25,7 @@ defmodule BuscaLivro.Livros.UserPedido do
     end
 
     create :create do
+      accept []
       primary? true
 
       argument :pedido, :map do
@@ -44,7 +45,6 @@ defmodule BuscaLivro.Livros.UserPedido do
 
     belongs_to :pedido, BuscaLivro.Livros.Pedido do
       allow_nil? false
-
       destination_attribute :id
     end
   end

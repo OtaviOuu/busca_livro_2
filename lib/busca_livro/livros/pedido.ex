@@ -15,8 +15,13 @@ defmodule BuscaLivro.Livros.Pedido do
   end
 
   actions do
-    defaults [:create, :read, :update, :destroy]
+    defaults [:read, :update, :destroy]
     default_accept [:texto]
+
+    create :create do
+      primary? true
+      accept [:texto]
+    end
 
     read :by_user do
       argument :user_id, :uuid do
