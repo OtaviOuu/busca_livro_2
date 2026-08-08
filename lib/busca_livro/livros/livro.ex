@@ -21,6 +21,7 @@ defmodule BuscaLivro.Livros.Livro do
 
   admin do
     show_calculations [:full_image_url]
+    label_field :titulo
   end
 
   oban do
@@ -41,8 +42,27 @@ defmodule BuscaLivro.Livros.Livro do
   end
 
   actions do
-    defaults [:create, :update, :destroy]
+    defaults [:update, :destroy]
     default_accept [:titulo, :image_url, :loja_nome, :descricao, :preco]
+
+    create :create do
+      primary? true
+
+      change after_action(fn changeset, result, _ctx ->
+               case BuscaLivro.Livros.Pedido
+                    |> Ash.ActionInput.for_action(
+                      :tentar_achar_users_com_match_no_pedido,
+                      %{livro: result}
+                    )
+                    |> Ash.run_action() do
+                 {:ok, users} ->
+                   {:ok, result}
+
+                 {:error, error} ->
+                   {:error, error}
+               end
+             end)
+    end
 
     read :read do
       primary? true

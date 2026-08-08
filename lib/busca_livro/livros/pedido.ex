@@ -18,6 +18,23 @@ defmodule BuscaLivro.Livros.Pedido do
     defaults [:read, :update, :destroy]
     default_accept [:texto]
 
+    read :search_pedidos do
+      argument :search_text, :string do
+        allow_nil? false
+      end
+
+      filter expr(ilike(texto, "%" <> ^arg(:search_text) <> "%"))
+    end
+
+    action :tentar_achar_users_com_match_no_pedido, {:array, :map} do
+      argument :livro, :struct do
+        constraints instance_of: BuscaLivro.Livros.Livro
+        allow_nil? false
+      end
+
+      run BuscaLivro.Livros.Actions.TentarAcharUsersComMatchNoPedido
+    end
+
     create :create do
       primary? true
       accept [:texto]
