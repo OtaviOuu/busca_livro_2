@@ -191,5 +191,16 @@ defmodule BuscaLivro.Livros.Livro do
     calculate :preco_formatado, :decimal, expr(round(preco / 100, 2)) do
       public? true
     end
+
+    calculate :inserted_at_humano,
+              :string,
+              expr(
+                fragment(
+                  "to_char(?, 'YYYY MM DD HH24:MI')",
+                  inserted_at
+                )
+              ) do
+      public? true
+    end
   end
 end

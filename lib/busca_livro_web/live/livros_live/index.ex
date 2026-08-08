@@ -10,7 +10,8 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
       <Cinder.collection
         query={
           Ash.Query.for_read(BuscaLivro.Livros.Livro, :read)
-          |> Ash.Query.load([:loja, :full_image_url, :preco_formatado])
+          |> Ash.Query.load([:loja, :full_image_url, :preco_formatado, :inserted_at_humano])
+          |> Ash.Query.sort(inserted_at: :desc)
         }
         layout={:grid}
         grid_columns={2}
@@ -18,8 +19,10 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
         theme={BuscaLivro.CustomCinderTheme}
         search={[label: "", placeholder: "Buscar livros..."]}
       >
-        <:col field="titulo" search sort filter />
-        <:col field="descricao" sort filter />
+        <:col field="inserted_at" sort />
+
+        <:col field="titulo" search />
+        <:col field="descricao" filter />
 
         <:col field="preco" sort filter />
 
@@ -90,10 +93,17 @@ defmodule BuscaLivroWeb.LivrosLive.Index do
 
       <%!-- Conteúdo --%>
       <div class="card-body p-4 gap-1.5 min-w-0">
-        <%!-- Loja badge --%>
-        <div class="flex items-center gap-1.5">
+        <%!-- Loja badge + data --%>
+        <div class="flex items-center justify-between gap-1.5">
           <span class={["badge badge-xs font-medium", loja_badge_class(@livro.loja.nome)]}>
             {@livro.loja.nome}
+          </span>
+
+          <span
+            class="flex items-center gap-1 text-[10px] text-base-content/40 font-medium tabular-nums"
+            title={"Adicionado em #{@livro.inserted_at_humano}"}
+          >
+            <.icon name="hero-calendar-mini" class="size-3" /> {@livro.inserted_at_humano}
           </span>
         </div>
 
