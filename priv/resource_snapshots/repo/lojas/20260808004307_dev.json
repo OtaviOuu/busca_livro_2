@@ -2,15 +2,15 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "fragment(\"uuid_generate_v7()\")",
+      "default": "nil",
       "generated?": false,
       "precision": null,
       "primary_key?": true,
       "references": null,
       "scale": null,
       "size": null,
-      "source": "id",
-      "type": "uuid"
+      "source": "nome",
+      "type": "text"
     },
     {
       "allow_nil?": false,
@@ -21,19 +21,7 @@
       "references": null,
       "scale": null,
       "size": null,
-      "source": "titulo",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "precision": null,
-      "primary_key?": false,
-      "references": null,
-      "scale": null,
-      "size": null,
-      "source": "image_url",
+      "source": "url",
       "type": "text"
     },
     {
@@ -59,38 +47,6 @@
       "size": null,
       "source": "updated_at",
       "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "precision": null,
-      "primary_key?": false,
-      "references": {
-        "deferrable": false,
-        "destination_attribute": "nome",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "index?": false,
-        "index_where": null,
-        "match_type": null,
-        "match_with": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "livros_loja_nome_fkey",
-        "on_delete": null,
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "lojas"
-      },
-      "scale": null,
-      "size": null,
-      "source": "loja_nome",
-      "type": "text"
     }
   ],
   "base_filter": null,
@@ -99,8 +55,23 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "60132C30CDAFC6EF5AECAED586B7B6949854DAFA198B78DD5C7A5ECAF4BB91AB",
-  "identities": [],
+  "hash": "C29FB9E0192E1F8C849A0F436565BE7568A15298C6B5D079E473526489342445",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "lojas_unique_nome_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "nome"
+        }
+      ],
+      "name": "unique_nome",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -108,5 +79,5 @@
   },
   "repo": "Elixir.BuscaLivro.Repo",
   "schema": null,
-  "table": "livros"
+  "table": "lojas"
 }

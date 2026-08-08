@@ -37,6 +37,12 @@ defmodule BuscaLivro.Livros.UserPedido do
     end
   end
 
+  attributes do
+    uuid_primary_key :id
+
+    timestamps()
+  end
+
   relationships do
     belongs_to :user, BuscaLivro.Accounts.User do
       allow_nil? false
